@@ -1,0 +1,6 @@
+Projeto criado durante o Hackathon Intel na Unicamp em 2012
+
+Jogo com foco em crianças, com o intuito de auxiliar o aprendizado dos lados esquerdo e direto do corpo.
+
+O jogo se joga com a tela do device voltado para o usuário, na posição vertical. O jogo sorteia um dos lados e reproduz o áudio (Esquerda ou Direita) no fone correspondente. Cada acerto é sinalizado com a cor verde, e é incrementado o placar. Cada erro é sinalizado na cor vermelha e o placar é zerado.
+ 

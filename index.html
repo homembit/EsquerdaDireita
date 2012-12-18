@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Esquerda Direita</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" charset="utf-8" src="cordova-2.2.0.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+    // Aguardar o carregamento do cordova
+    //
+    document.addEventListener("deviceready", onDeviceReady, false);
+    var FirstRun = 1; // Para que execute o sorteio apenas uma vez em cada execução de callback
+    var valendo = 0; // Para que interprete o resultado apenas uma vez por sorteio
+    var direita = 0;
+    var esquerda = 0;
+    var placar = 0;
+    var somDir = null;
+    var somEsq = null;
+    
+    
+    // Cordova está OK
+    //
+    function onDeviceReady() {
+        var opt = {};
+        opt.frequency = 200;
+        timer = navigator.accelerometer.watchAcceleration(onSuccess, onError,opt);
+        createCanvas();
+    }
+
+    // onSuccess: Ler a aceleração atual
+    // Se o valor de X for positivo, o device está inclinado para a esquerda
+    // Se o valor de X for negativo, o device está inclinado para a direita
+    function onSuccess(acel)
+    {
+      var color;
+      if(Math.round(acel.x,0) > 3)
+      {
+        // Esquerda
+        FirstRun = 1;
+        if (valendo)
+        {
+          if(esquerda)
+          { //acertou
+            esquerda = 0;
+            direita = 0;
+            valendo = 0;
+            placar = placar +1;
+            color = "green";
+          }
+          else
+          { //errou
+            esquerda = 0;
+            direita = 0;
+            valendo = 0;
+            placar = 0;
+            color = "red";
+          }
+        }
+      }
+      else if (Math.round(acel.x,0) < -3)
+      {
+        // Direita
+        FirstRun = 1;
+        if(valendo)
+        {
+          if(direita)
+          { //acertou
+            esquerda = 0;
+            direita = 0;
+            valendo = 0;
+            placar = placar +1;
+            color = "green";
+          }
+          else
+          { //errou
+            esquerda = 0;
+            direita = 0;
+            placar = 0;
+            valendo = 0;
+            color = "red";            
+          }
+        }
+      }
+     else
+     {
+        // Está centralizado
+       color = "orange";
+       if(FirstRun)
+       {
+        if(Math.floor((((Math.random())*10)+1))%2)
+        {
+         FirstRun = 0;
+         if(somDir == null)
+         {
+          somDir = new Media("/android_asset/www/Direita.ogg");              
+         }
+         somDir.play();         
+         direita = 1;
+         valendo = 1;
+        }
+        else
+        {
+         FirstRun = 0;
+         if(somEsq == null)
+         {         
+          somEsq = new Media("/android_asset/www/Esquerda.ogg");
+         }
+         somEsq.play();         
+         esquerda = 1;
+         valendo = 1;
+        }
+       }
+     }
+     drawBackground(color);
+     var canvas = getCanvas();
+     var x = canvas.width / 2;
+     var y = canvas.height / 2;
+
+     drawText(placar, x,y);
+    }
+
+    // onError: A leitura da aceleração falhou
+    //
+    function onError() {
+        alert('Erro!');
+    }
+    
+    function createCanvas(){
+        var screenWidth = document.width;
+        var screenHeight = document.height;
+
+        var canvas = document.createElement("canvas");
+        canvas.width = screenWidth;
+        canvas.height = screenHeight;
+        canvas.id = "mainCanvas";
+
+        document.body.appendChild(canvas);
+    }
+
+    function getCanvas(){
+        return document.getElementById('mainCanvas');
+    }
+
+    function getCanvasContext(){
+        return getCanvas().getContext("2d");
+    }
+
+    function drawBackground(color){
+        var canvas = getCanvas();
+        var ctx = getCanvasContext();
+
+        if(color != null){
+            ctx.fillStyle = color;
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+        }
+    }
+
+     function drawText(text, x, y, color){
+        var ctx = getCanvasContext();
+
+        if(color == null){
+            color = "white";
+        }
+        
+        ctx.font = "80px sans-serif";
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'white';
+        ctx.fillText(text, x, y);
+    }
+
+    
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

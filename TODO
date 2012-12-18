@@ -1,0 +1,5 @@
+TODO:
+
+1. Gravar o áudio com uma voz mais interessante...
+2. Resolver um problema com a reprodução de áudio, visando reutilizar o objeto de áudio ao invés de ficar recriando-o a cada rodada (único modo que encontramos de utiliza-lo nesta versão do Cordova.
+3. Implementar o armazenamento de placar local. 
